@@ -1,48 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Krediit Union 2</title>
-    <script async src="https://api.beta.glia.com/salemove_integration.js"></script>
-</head>
-<body>
-    <h1>Hello World Helen 2</h1>
+    <meta charset="UTF-8">
+    <title>Krediit Union 2 - Test</title>
     
-    <button id="button1" class="button">Contact Us</button>
-    <button id="button2" class="button">Sign Up</button>
-
+    <script src="https://api.beta.glia.com/salemove_integration.js"></script>
+    
     <script>
-        /**
-         * Since the script is async, we use sm.getApi 
-         * which waits for the Glia library to be ready.
-         */
-        window.onload = function() {
-            if (window.sm) {
-                sm.getApi({version: 'v1'}).then(function(glia) {
-                    console.log("Glia initialized on Site 2");
+        // 2. Immediate check: Is the Glia object present?
+        console.log("Checking for Glia library...");
+        
+        if (window.sm) {
+            console.log("Glia (sm) found in the head!");
+            
+            sm.getApi({version: 'v1'}).then(function(glia) {
+                console.log("Glia API version 1 is ready.");
 
-                    // 1. Setup the "Sign Up" button event
+                // Wait for the DOM to be ready before attaching to buttons
+                document.addEventListener("DOMContentLoaded", function() {
                     const signUpBtn = document.querySelector('#button2');
                     if (signUpBtn) {
                         signUpBtn.addEventListener('click', function() {
-                            // Record the custom event
+                            console.log("Sign Up clicked - recording event");
                             glia.recordEvent({message: 'Visitor wants to sign up on Site 2'});
-                            // Optional: Request engagement automatically
-                            // glia.requestEngagement('text');
                         });
                     }
 
-                    // 2. Setup the "Contact Us" button event
                     const contactBtn = document.querySelector('#button1');
                     if (contactBtn) {
                         contactBtn.addEventListener('click', function() {
+                            console.log("Contact Us clicked - requesting engagement");
                             glia.requestEngagement('text');
                         });
                     }
-                }).catch(function(error) {
-                    console.error("Glia failed to load:", error);
                 });
-            }
-        };
+            }).catch(function(err) {
+                console.error("Glia API failed:", err);
+            });
+        } else {
+            console.warn("Glia (sm) not found yet. Check 'Allowed Web Addresses' in Glia Hub.");
+        }
     </script>
+</head>
+<body>
+    <h1>Hello World Helen 2</h1>
+    <p>Status: Troubleshooting Glia Load...</p>
+    
+    <button id="button1">Contact Us</button>
+    <button id="button2">Sign Up</button>
 </body>
 </html>
